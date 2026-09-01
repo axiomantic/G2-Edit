@@ -106,6 +106,7 @@ jobs:
       #   2. at least two entry points were derived from it
       #   3. at least one `tools/*` branch was fetched to compare against
       - name: lint-current-is-not-behind
+        if: ${{ !cancelled() }}
         working-directory: lint-tools
         run: |
           set -euo pipefail
