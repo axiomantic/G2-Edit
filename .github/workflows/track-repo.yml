@@ -97,12 +97,12 @@ jobs:
       # byte what a clean tree prints. The scan that examined no file and the
       # scan that found no violation were indistinguishable, and this step
       # guards the clean-room payload boundary -- the place where a silent GREEN
-      # costs the most. Two controls close it:
+      # costs the most. These controls close it:
       #
       #   1. the scope directory exists
       #   2. the glob matched at least one file, counted and asserted
       #
-      # and a third proves the instrument is alive:
+      # and this one proves the instrument is alive:
       #
       #   3. every pattern still matches its own probe, so a pattern broken by
       #      an edit to its split literal cannot report a clean tree it never
