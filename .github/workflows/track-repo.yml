@@ -105,6 +105,7 @@ jobs:
       #   1. this workflow file is present, so the read set has a source
       #   2. at least two entry points were derived from it
       #   3. at least one `tools/*` branch was fetched to compare against
+      #   4. the read set is non-empty, so the comparison below is bounded
       - name: lint-current-is-not-behind
         if: ${{ !cancelled() }}
         working-directory: lint-tools
@@ -164,6 +165,13 @@ jobs:
             exit 1
           fi
           echo "lint-current is $(git rev-parse HEAD). Comparing it against $n tools/* branch(es)."
+
+          # CONTROL 4: the comparison is bounded.
+          if [ -z "$readset" ]; then
+            echo "CONTROL FAILED: the read set is empty, so the comparison below would be"
+            echo "unbounded and would report drift in files this job never reads."
+            exit 1
+          fi
 
           stale=0
           for b in $(git for-each-ref --format='%(refname:short)' refs/remotes/stack); do
