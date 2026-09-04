@@ -1,4 +1,4 @@
-# The lint-only caller. Task REPO-6 owns this file.
+# The lint-only caller.
 #
 # This repository holds NO source of this project's own, so it runs no T0 suite
 # and it gets a lint-only caller rather than a `ci.yml`. It carries no build
@@ -8,11 +8,28 @@
 # The four artifact-boundary lint steps run here like in any other repository.
 # That is the distinction the plan makes: the lint steps run in every
 # repository, and a T0 suite runs only where this plan writes a test.
+#
+# The `push` trigger is now scoped to the default branch, so a branch and its
+# pull request are judged once, by the `pull_request` event.
+#
+# That event checks out the MERGE result; a `push` event checks out the head as
+# it stands. The reusable workflow's checkout of the repository under test
+# passes no `ref:`, so the event alone decides which tree the lints read.
+#
+# The cost, stated and not hidden: a branch with no open pull request is no
+# longer covered. That is what the unscoped trigger bought, and it is
+# deliberately given up.
+#
+# Why, measured 2026-09-04: two pull requests elsewhere in this queue were red
+# only in the `push` context, and their head trees failed on different lint
+# codes. One reported 24 findings against its head, the other 1, and both
+# reported 0 against their merge tree. The counts differ; the zero does not.
 
 name: Lint
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
