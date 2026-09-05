@@ -5,10 +5,6 @@
 # matrix, no T0 context and no required check. It keeps whatever upstream
 # already configures.
 #
-# The four artifact-boundary lint steps run here like in any other repository.
-# That is the distinction the plan makes: the lint steps run in every
-# repository, and a T0 suite runs only where this plan writes a test.
-#
 # The `push` trigger is now scoped to the default branch, so a branch and its
 # pull request are judged once, by the `pull_request` event.
 #

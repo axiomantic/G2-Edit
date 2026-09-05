@@ -312,9 +312,6 @@ jobs:
             fail=1
           fi
 
-          # The allow-list is the set of jobs the plan places INSIDE the private
-          # repository. That is exactly one workflow file, and it is allow-listed
-          # only when the calling repository is the private one.
           allow=""
           if [ "${VISIBILITY}" = "private" ]; then
             allow="t1-t2.yml"
