@@ -75,6 +75,13 @@ not name, look at what it produced. Do not read the exit code and stop.
 
 Count with a command. Never estimate a number, and never recall one.
 
+**Check the outcome, not a proxy for it.** Before a risky change, it is tempting
+to verify a precondition that stands in for the thing you care about. Verify the
+thing itself, afterwards. A guard that a deleted tool would not return was
+written as "these three files are absent from the branch" — they were absent, and
+the tool came back anyway through a workflow that referenced it. The question was
+never "are these files here" but "does the tool exist when I am done".
+
 State what you ran next to the result. A rule stated more broadly than what you
 tested is false in a way the test will not show you.
 
@@ -149,13 +156,18 @@ Quote every argument that contains a glob character. An unquoted `?` or `*` is
 eaten by the shell, the command never runs, and the empty output reads exactly
 like a measured absence.
 
+**Run a positive control before you trust a zero.** Search for something you
+know is there, in the same command shape, and confirm it is found. Every way a
+search can lie returns an empty result and exit 0: a case difference, a quoted
+glob the shell ate, a bare clone with no remote refs, a tool that skips
+untracked files. None of them reports an error. The control is the only thing
+that separates "absent" from "not looked at".
+
 A path that is missing from a default branch is not missing from the repository.
 Two repositories here hold their product work on stacked branches. Check the
 branch before you report a file as absent.
 
----
-
-## This repository
+## G2-Edit
 
 **Licence: GPL-3.0+. This is a fork of `chrispurusha/G2-Edit`.** Never open a
 pull request against that repository. This repository is lint only.
