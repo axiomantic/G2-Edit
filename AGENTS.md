@@ -75,6 +75,13 @@ not name, look at what it produced. Do not read the exit code and stop.
 
 Count with a command. Never estimate a number, and never recall one.
 
+**Check the outcome, not a proxy for it.** Before a risky change, it is tempting
+to verify a precondition that stands in for the thing you care about. Verify the
+thing itself, afterwards. A guard that a deleted tool would not return was
+written as "these three files are absent from the branch" — they were absent, and
+the tool came back anyway through a workflow that referenced it. The question was
+never "are these files here" but "does the tool exist when I am done".
+
 State what you ran next to the result. A rule stated more broadly than what you
 tested is false in a way the test will not show you.
 
@@ -139,6 +146,25 @@ push either fails or writes the wrong ref.
 
 Work in a clone you created yourself. Never delete a path you did not create.
 
+**Containment by ancestry and containment by content are different questions.**
+`git merge-base --is-ancestor` answers "is this commit in that history". It does
+NOT answer "does that branch already carry this work". Where a stack was rebuilt
+rather than merged -- any rebase, cherry-pick or squash -- ancestry says NOT
+CONTAINED for work that is fully present. It is wrong in the dangerous direction
+too: a fix can sit on three branches as three distinct commits and ancestry finds
+none of them from a fourth.
+
+Say which question you are answering. To decide whether closing something loses
+work, compare CONTENT -- hash the files, or diff the trees and count what is
+absent from the survivor. Reserve ancestry for what it is exact about: whether a
+fast-forward exists.
+
+Observed twice in one day, in opposite directions. A rule demanding an ancestry
+proof before any close would have blocked every legitimate close in a repository
+whose branches were rebuilt; applying it loosely instead would have deleted a
+branch holding seven files that existed nowhere else. Elsewhere the same test
+returned false for all three copies of a bug fix that blob identity found at once.
+
 ## Searching
 
 `git grep` does not see untracked files. An empty result and an unsearched file
@@ -149,13 +175,18 @@ Quote every argument that contains a glob character. An unquoted `?` or `*` is
 eaten by the shell, the command never runs, and the empty output reads exactly
 like a measured absence.
 
+**Run a positive control before you trust a zero.** Search for something you
+know is there, in the same command shape, and confirm it is found. Every way a
+search can lie returns an empty result and exit 0: a case difference, a quoted
+glob the shell ate, a bare clone with no remote refs, a tool that skips
+untracked files. None of them reports an error. The control is the only thing
+that separates "absent" from "not looked at".
+
 A path that is missing from a default branch is not missing from the repository.
 Two repositories here hold their product work on stacked branches. Check the
 branch before you report a file as absent.
 
----
-
-## This repository
+## G2-Edit
 
 **Licence: GPL-3.0+. This is a fork of `chrispurusha/G2-Edit`.** Never open a
 pull request against that repository. This repository is lint only.
